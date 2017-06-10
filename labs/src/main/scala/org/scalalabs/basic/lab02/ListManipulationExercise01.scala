@@ -16,7 +16,8 @@ object ListManipulationExercise01 {
    */
   def firstElementInList[T](l: List[T]): T = {
     //buildin
-    null.asInstanceOf[T]
+       l.head
+    //null.asInstanceOf[T]
   }
 
   /**
@@ -25,7 +26,7 @@ object ListManipulationExercise01 {
    * https://www.scala-lang.org/docu/files/api/scala/List.html#foldLeft(B)
    */
   def sumOfList(l: List[Int]): Int = {
-    error("fix me")
+      l.foldLeft(0)((b, a)=> b + a)
   }
 
   /**
@@ -36,8 +37,10 @@ object ListManipulationExercise01 {
    *  - by using a foldLeft function
    *  - ... etc
    */
-  def lastElementInList[T](l: List[T]): T = {
-    error("fix me")
+  def lastElementInList[T](l: List[T]): T = l match {
+    case Nil => throw new ArrayIndexOutOfBoundsException
+    case x :: Nil => x
+    case _ :: xs => lastElementInList(xs)
   }
 
   /**
@@ -48,8 +51,11 @@ object ListManipulationExercise01 {
    *  - custom made (for instance, it can be done in a fun way by using the zipWithIndex function, that is available on a List)
    *  - ... etc
    */
-  def nthElementInList[T](n: Int, l: List[T]): T = {
-    error("fix me")
+  def nthElementInList[T](n: Int, l: List[T]): T = (n, l) match {
+    case (_, Nil) => throw new ArrayIndexOutOfBoundsException
+    case (0, x :: _) => x
+    case (l, _ :: xs) => nthElementInList(l-1, xs)
+
   }
 
   /**
@@ -60,9 +66,7 @@ object ListManipulationExercise01 {
    *  - custom made
    *  - ... etc
    */
-  def concatLists[T](l1: List[T], l2: List[T]): List[T] = {
-    error("fix me")
-  }
+  def concatLists[T](l1: List[T], l2: List[T]): List[T] = l1 ::: l2
 
   /**
    * Sort a list on the natural ordering, so sortList(3,1,2) = List(1,2,3).
@@ -73,7 +77,7 @@ object ListManipulationExercise01 {
    *
    */
   def sortList[T <% Ordered[T]](list: List[T]): List[T] = {
-    error("fix me")
+           list.sortWith( _.compareTo(_) < 0)
   }
 
   /**
@@ -81,7 +85,9 @@ object ListManipulationExercise01 {
    * Again, easy to implement using built-in functionality, but also possible to implement in your own free-style way.
    */
   def elementExists[T](l: List[T], e: T): Boolean = {
-    error("fix me")
+     val el: Option[T] = l.find(element => element == e)
+     el.isDefined
+
   }
 
   /**
@@ -89,9 +95,7 @@ object ListManipulationExercise01 {
    * As always, use either build-in functions (for instance the filter method), or roll your own way via a
    * pattern match or some other method.
    */
-  def oddElements(iList: List[Int]): List[Int] = {
-    error("fix me")
-  }
+  def oddElements(iList: List[Int]): List[Int] = iList.filter( element => element % 2 != 0)
 
   /**
    * Inspired by Haskell's tails function: http://www.zvon.org/other/haskell/Outputlist/tails_f.html
@@ -101,7 +105,16 @@ object ListManipulationExercise01 {
    * Implement it whatever way suites you best. Hint: it can be done in a neat way using recursion.
    */
   def tails[T](l: List[T]): List[List[T]] = {
-    error("fix me")
+      def appendToTail(ll: List[List[T]], ls: List[T]): List[List[T]] = (ll, ls) match {
+        case (Nil, ls) =>  appendToTail(List(ls), ls)
+        case (ml, _ :: Nil) => appendToTail(Nil +: ml, Nil)
+        case (ml, _ :: xa) => appendToTail(xa +: ml, xa)
+        case (ml, Nil) =>  ml
+      }
+
+      appendToTail(List(), l).reverse
+
   }
+
 }
 

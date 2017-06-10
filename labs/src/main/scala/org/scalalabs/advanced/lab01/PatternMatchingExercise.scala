@@ -1,7 +1,7 @@
 package org.scalalabs.advanced.lab01
 
 import scala.xml._
-import collection.mutable.{ ListBuffer => MList }
+import collection.mutable.{ ListBuffer ⇒ MList }
 import scala.None
 
 /**
@@ -171,9 +171,9 @@ object PatternMatchingExercise {
 
   private def getXML = XML.load(this.getClass.getResourceAsStream("/movies.xml"))
 
-  private def movieNodeProcessor(filter: (Node, MList[String]) => Any): List[String] = {
+  private def movieNodeProcessor(filter: (Node, MList[String]) ⇒ Any): List[String] = {
     var capturer = new MList[String]()
-    for (movieNode <- getXML \\ "Movie" \ "_") {
+    for (movieNode ← getXML \\ "Movie" \ "_") {
       filter(movieNode, capturer)
     }
     capturer.toList

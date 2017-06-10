@@ -79,7 +79,7 @@ class SimpleChatClient extends Actor {
  * The self annotation indicates that this ChatServer should be mixed in with the ChatMgt and the MessageMgt traits.
  */
 trait ChatServer extends Actor {
-  self: ChatMgt with MessageMgt =>
+  self: ChatMgt with MessageMgt ⇒
 
   protected def messageMgt: PartialFunction[Any, Unit]
 
@@ -93,7 +93,7 @@ trait ChatServer extends Actor {
 }
 
 trait ChatClientOps extends Actor {
-  self: ChatClient =>
+  self: ChatClient ⇒
 
   private val loggedInAt = new DateTime
   private var chatLog: List[String] = Nil
@@ -135,7 +135,7 @@ case class ChatClient(val name: String, val server: Actor) extends ChatClientOps
  * The self-type annotation (self: Actor =>) means that this trait can only be used when mixed in with an Actor.
  */
 trait MessageMgt {
-  self: Actor with ChatMgt =>
+  self: Actor with ChatMgt ⇒
   protected var messages: List[String] = Nil
 
   /**
@@ -150,7 +150,7 @@ trait MessageMgt {
    */
   protected def messageMgt: PartialFunction[Any, Unit] = {
     //TODO implement
-    case _ =>
+    case _ ⇒
 
   }
 }
@@ -161,7 +161,7 @@ trait MessageMgt {
  * The self-type annotation (self: Actor =>) means that this trait can only be used when mixed in with an Actor.
  */
 trait ChatMgt {
-  self: Actor =>
+  self: Actor ⇒
 
   protected var sessions = new HashMap[String, Actor]
 
@@ -174,7 +174,7 @@ trait ChatMgt {
    */
   protected def chatMgt: PartialFunction[Any, Unit] = {
     //TODO implement
-    case _ =>
+    case _ ⇒
 
   }
 

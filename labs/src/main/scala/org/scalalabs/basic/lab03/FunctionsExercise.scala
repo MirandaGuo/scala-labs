@@ -1,4 +1,8 @@
 package org.scalalabs.basic.lab03
+
+
+import java.sql.Date
+
 import scala.language.reflectiveCalls
 import sys._
 /**
@@ -16,8 +20,11 @@ object FunctionsExercise01 {
   var printed = ""
   private def logPerf(elapsed: Long) = printed = s"The execution took: $elapsed ms"
 
-  def measure[T]( /* provide correct method parameter */ ): T = {
-    error("fix me")
+  def measure[T](f: => T): T = {
+    val before = System.currentTimeMillis()
+    val result = f
+    logPerf(System.currentTimeMillis() - before)
+    result
   }
 
 }
@@ -31,15 +38,22 @@ object FunctionsExercise01 {
 object FunctionsExercise02 {
 
   def plusOne(x: Int): Int = {
-    //implement this using a partial function
-    error("fix me")
+    //implement this using a partially applied function
+    val partially = plus(1, _: Int)
+     partially(x)
+
   }
 
   def plus(x: Int, y: Int): Int = {
     x + y
   }
 
-  def using[A <: { def close(): Unit }, B](closable: A)(f: A => B): B = {
-    error("fix me")
+  def using[A <: { def close(): Unit }, B](closable: A)(f: A ⇒ B): B = {
+
+       try{
+         f(closable)
+       }finally {
+         closable.close()
+       }
   }
 }

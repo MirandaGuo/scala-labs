@@ -13,7 +13,7 @@ import sys._
  * In the Scala libraries, a far more complete (and more complex) version is the scala.math.Ordering trait.
  */
 trait Ord[A] {
-  self =>
+  self ⇒
   def compare(x: A, y: A): Int
 
   /**
@@ -38,7 +38,7 @@ trait Ord[A] {
    * is supposed to be implicitly convertable to the Ord trait.
    * the Ord trait itself. Again, this can be achieved by passing Ord as an implicit parameter to achieve this, and defined the required implicit conversions in the Ord object.
    */
-  def minFor[T](xs: List[T], f: T => A) = error("implement me")
+  def minFor[T](xs: List[T], f: T ⇒ A) = error("implement me")
 
   /**
    * TODO implement the minFor method, so that it returns the max element of the given list. The Ordering is defined by the given
@@ -46,14 +46,14 @@ trait Ord[A] {
    * is supposed to be implicitly convertable to the Ord trait.
    * the Ord trait itself. Again, this can be achieved by passing Ord as an implicit parameter to achieve this, and defined the required implicit conversions in the Ord object.
    */
-  def maxFor[T](xs: List[T], f: T => A) = error("implement me")
+  def maxFor[T](xs: List[T], f: T ⇒ A) = error("implement me")
   /**
    * TODO implement the on method, so that it returns the and Ord that is defined by the given
    * function f, which takes a list parameter, and returns an element of a possibly different type (denoted by A). The return type of the function f
    * is supposed to be implicitly convertable to the Ord trait.
    * the Ord trait itself. Again, this can be achieved by passing Ord as an implicit parameter to achieve this, and defined the required implicit conversions in the Ord object.
    */
-  def on[T](f: T => A): Ord[T] = error("implement me")
+  def on[T](f: T ⇒ A): Ord[T] = error("implement me")
 }
 
 object Ord {
@@ -268,7 +268,7 @@ object Monads {
      * A chaining function, binding the result of the computation of the left to the right.
      * In Scala, this is defined as the flatMap function.
      */
-    def bind[A, B](a: C[A], f: A => C[B]): C[B]
+    def bind[A, B](a: C[A], f: A ⇒ C[B]): C[B]
   }
 
   object Monad {
