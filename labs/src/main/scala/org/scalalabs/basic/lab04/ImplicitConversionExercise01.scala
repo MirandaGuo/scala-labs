@@ -31,7 +31,7 @@ object ImplicitConversionExercise01 {
       //built in: our String will be converted to Scala's RichString, because this is defined a Scala
       //object called Predef. This is imported by the compiler by default.
       //
-      List[Char]()
+      s.toCharArray.toList
     }
 
   }
@@ -39,16 +39,27 @@ object ImplicitConversionExercise01 {
   /**============================================================================ */
 
   object Exercise02 {
+
     class Celsius(val degree: Double)
     class Fahrenheit(val fahrenheit: Double)
 
     object TemperaturPrinter {
+
       def printCelsius(c: Celsius): String = {
         "It's " + c.degree + " degree celsius"
       }
 
+
       def printFahrenheit(f: Fahrenheit): String = {
         "It's " + f.fahrenheit + " fahrenheit"
+      }
+
+      implicit def convertFatoCel(c: Celsius): Fahrenheit = {
+        new Fahrenheit(ConversionHelper.celsius2FahrenheitConversion(c.degree))
+      }
+
+      implicit def convertCelToFa(f: Fahrenheit): Celsius = {
+        new Celsius(ConversionHelper.fahrenheit2CelsiusConversion(f.fahrenheit))
       }
     }
 
@@ -73,6 +84,15 @@ object ImplicitConversionExercise01 {
 
   object Exercise03 {
 
+    implicit class convertString(s: String) {
+      def camelCase = {
+        val split = s.split(" ")
+        val tail = split.tail.map(_.toLowerCase.capitalize).mkString("")
+        split.head + tail
+      }
+    }
+
+
   }
 
   /**============================================================================ */
@@ -82,16 +102,23 @@ object ImplicitConversionExercise01 {
       case class DurationBuilder(timeSpan: Long) {
         def now = new DateTime().getMillis()
 
-        //    def seconds = TODO your implementation here...
+            def seconds = new RichDuration(TimeUtils seconds timeSpan)
 
-        //    def minutes = TODO your implementation here...
+            def minutes = new RichDuration(TimeUtils minutes timeSpan)
 
-        //    def hours = TODO your implementation here...
+            def hours = new RichDuration(TimeUtils hours timeSpan)
 
-        //    def days = TODO your implementation here...
+            def days = new RichDuration(TimeUtils days timeSpan)
       }
 
       //TODO define some implicits that convert integers and longs to durations and builders to make it all work
+      implicit def convertLong(span: Long): Duration = {
+         new Duration(span)
+      }
+
+      implicit def convertInt(span: Int): DurationBuilder = {
+        new DurationBuilder(span * 1L)
+      }
 
       def seconds(in: Long) = in * 1000L
 

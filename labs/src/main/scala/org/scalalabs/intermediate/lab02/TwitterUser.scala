@@ -13,6 +13,13 @@ abstract class TwitterUser {
   val friendsCount: Int
   val followersCount: Int
   val statusesCount: Int
+
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case that: TwitterUser => (this.id == that.id)
+    case _ => false
+  }
+
+  override def hashCode(): Int = id.hashCode
 }
 
 object TwitterUser {
@@ -28,6 +35,8 @@ object TwitterUser {
       val friendsCount = (node \ "friends_count").text.toInt
       val followersCount = (node \ "followers_count").text.toInt
       val statusesCount = (node \ "statuses_count").text.toInt
+
+
     }
   }
 

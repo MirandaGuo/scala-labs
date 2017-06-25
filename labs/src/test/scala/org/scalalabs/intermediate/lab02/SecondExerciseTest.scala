@@ -34,10 +34,9 @@ class SecondExerciseTest extends JUnitSuite {
   @Test
   def testFindPopularFriends() {
     // TwitterUsers are popular if they have at least 2000 followers
-    fail("TODO uncomment and fix")
-    //        assertResult(10) {
-    //            TwitterUsers.thatArePopular(getFriends()).size
-    //        }
+            assertResult(10) {
+                TwitterUsers.thatArePopular(getFriends()).size
+            }
   }
 
   @Test
@@ -45,50 +44,47 @@ class SecondExerciseTest extends JUnitSuite {
     // Imports can appear all over your code. This is a local import that also
     // includes an alias (sometimes handy to prevent name-clashes but used here
     // simply because we can).
-    fail("TODO uncomment and fix")
-    //       import scala.{TwitterUsers => Friends}
-    //
-    //        assertResult(List("headius", "twitterapi", "stephenfry", "macrumors", "spolsky", "martinfowler", "WardCunningham", "unclebobmartin", "pragdave", "KentBeck")) {
-    //            Friends.thatArePopularByScreenName(getFriends)
-    //        }
+
+           import org.scalalabs.intermediate.lab02.{TwitterUsers => Friends}
+
+            assertResult(List("headius", "twitterapi", "stephenfry", "macrumors", "spolsky", "martinfowler", "WardCunningham", "unclebobmartin", "pragdave", "KentBeck")) {
+                Friends.thatArePopularByScreenName(getFriends)
+            }
   }
 
   // the same List[String] as last time but now sorted by followersCount (highest first)
   @Test
   def testFindScreenNamesOfPupularFriendsSortedByPopularity() {
-    fail("TODO uncomment and fix")
-    //        assertResult(List("stephenfry", "macrumors", "twitterapi", "spolsky", "martinfowler", "KentBeck", "unclebobmartin", "pragdave", "WardCunningham", "headius")) {
-    //            TwitterUsers.thatArePopularByScreenNameSortedbyPopularity(getFriends)
-    //        }
+            assertResult(List("stephenfry", "macrumors", "twitterapi", "spolsky", "martinfowler", "KentBeck", "unclebobmartin", "pragdave", "WardCunningham", "headius")) {
+                TwitterUsers.thatArePopularByScreenNameSortedbyPopularity(getFriends)
+            }
   }
 
   // We assertResult a List[(String, Int)], i.e. a List of tuples, each with a screen name and a number of followers
   @Test
   def testFindPopularFriendsAndTheirRankings() {
-    fail("TODO: uncomment and fix")
-    //        assertResult(
-    //            List(("stephenfry",    714779),
-    //                 ("macrumors",     74132),
-    //                 ("twitterapi",    18817),
-    //                 ("spolsky",       12607),
-    //                 ("martinfowler",  8759),
-    //                 ("KentBeck",      6440),
-    //                 ("unclebobmartin",5175),
-    //                 ("pragdave",      4462),
-    //                 ("WardCunningham",4423),
-    //                 ("headius",       2378))
-    //        ) {
-    //            TwitterUsers.thatArePopularByScreenNameAndPopularitySortedbyPopularity(getFriends)
-    //        }
+            assertResult(
+                List(("stephenfry",    714779),
+                     ("macrumors",     74132),
+                     ("twitterapi",    18817),
+                     ("spolsky",       12607),
+                     ("martinfowler",  8759),
+                     ("KentBeck",      6440),
+                     ("unclebobmartin",5175),
+                     ("pragdave",      4462),
+                     ("WardCunningham",4423),
+                     ("headius",       2378))
+            ) {
+                TwitterUsers.thatArePopularByScreenNameAndPopularitySortedbyPopularity(getFriends)
+            }
   }
 
   // Hint: you might want to implement equals and hashcode for this one
   @Test
   def testFindFriendsThatAreAlsoFollowers() {
-    fail("TODO: uncomment and fix")
-    //        assertResult(10) {
-    //            TwitterUsers.thatAreInBothLists(getFriends, getFollowers).size
-    //        }
+            assertResult(10) {
+                TwitterUsers.thatAreInBothLists(getFriends, getFollowers).size
+            }
   }
 
 }

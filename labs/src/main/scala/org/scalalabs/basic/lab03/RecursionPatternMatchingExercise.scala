@@ -43,12 +43,23 @@ object RecursionPatternMatchingExercise {
 
     def addToGroup(group: List[List[T]], l: List[T]): List[List[T]] =
       (group, l) match {
-        case (Nil, Nil) => List(List())
-        case (xa, b :: xb) if(b != xb.head) => addToGroup(xa :+ List(b), xb)
-        case (xa, b:: xb) if( b == xb.head) => ???
-
+        case (List(List()), b :: xb) => {
+          addToGroup( List(List(b)), xb)
+        }
+        case (x :: xa, b :: Nil) if(x.contains(b)) =>{
+          (x :+ b) :: xa
+        }
+        case (x :: xa, b :: Nil) if(!x.contains(b)) =>{
+          ((b :: Nil) :: x :: xa)
+        }
+        case (x :: xa, b :: xb) if(x.contains(b)) => {
+          addToGroup((x :+ b) :: xa, xb)
+        }
+        case (x :: xa, b :: xb) if(!x.contains(b)) => {
+          addToGroup( (b :: Nil) :: x :: xa, xb)
+        }
       }
-     addToGroup(List(List()), in)
+     addToGroup(List(List()), in).reverse
   }
 
   /**
@@ -56,15 +67,28 @@ object RecursionPatternMatchingExercise {
    * List(1,1,2,3,1,1) -> List(1,1,1,1), List(2), List(3)
    */
   def groupEquals[T](in: List[T]): List[List[T]] = {
-    error("fix me")
+    def mapGroups(groups: Map[T, List[T]], list: List[T]): Map[T, List[T]] = (groups, list) match {
+      case (group, Nil) => group
+      case (group, head :: tail) => {
+        group.get(head) match {
+          case Some(value) => mapGroups((group - head) + (head -> (head :: value)), tail)
+          case None => mapGroups(group + (head -> List(head)), tail)
+        }
+      }
+    }
+
+    mapGroups(Map(), in).values.toList.reverse
   }
 
   /**
    * Compress values
    * List(1,1,2,3,1,1) -> List(1,2,3)
    */
-  def compress[T](in: List[T]): List[T] = {
-    error("fix me")
+  def compress[T](in: List[T]): List[T] = in match {
+    case x :: Nil => List(x)
+    case x :: xl if (x == xl.head) => compress(xl)
+    case x :: xl if( x != xl.head) => x :: compress(xl)
+    case _ => Nil
   }
 
   /**
@@ -72,7 +96,7 @@ object RecursionPatternMatchingExercise {
    * List(1,1,2,3,1,1) -> List((4,1),(1,2),(1,3))
    */
   def amountEqualMembers[T](in: List[T]): List[(Int, T)] = {
-    error("fix me")
+     ???
   }
 
   /**

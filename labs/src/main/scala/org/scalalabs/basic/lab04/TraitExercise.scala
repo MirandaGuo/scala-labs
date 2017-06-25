@@ -17,19 +17,21 @@ object Level extends Enumeration {
   type Level = Value
   val Debug, Info = Value
 }
+
+
 import Level._
 class SimpleLogger(clazz: String) {
   import SimpleLogger._
   /**
    * Logs debug
    */
-  def debug(msg: => Any) = log(Debug, msg)
+  def debug(msg: ⇒ Any) = log(Debug, msg)
   /**
    * Log info
    */
-  def info(msg: => Any) = log(Info, msg)
+  def info(msg: ⇒ Any) = log(Info, msg)
 
-  private def log(level: Level, msg: => Any) = {
+  private def log(level: Level, msg: ⇒ Any) = {
     def isLevelEnabled(level: Level) = logConfig.getOrElse(level, false)
     if (isLevelEnabled(level)) {
       val logMsg = f"$level%-7s $clazz $msg"
@@ -48,7 +50,7 @@ object SimpleLogger {
   def apply(clazz: String) = new SimpleLogger(clazz)
 }
 
-class DummyService {
+class DummyService extends Loggable {
 
   /**
    * the logger must be removed.
@@ -56,12 +58,20 @@ class DummyService {
    * Finally, mix-in the Loggable trait in this class in order to log the statments
    * in the sendSomething method
    */
-  val logger = SimpleLogger(getClass().getName())
 
   def sendSomething(msg: Any) = {
-    logger.debug("Prepare sending")
-    logger.info(s"$msg successfully sent")
-    logger.debug("Done")
+    debug("Prepare sending")
+    info(s"$msg successfully sent")
+    debug("Done")
   }
+}
+
+trait Loggable {
+
+  private lazy val logger = SimpleLogger(getClass().getName())
+
+  def debug = logger debug _
+  def info = logger info _
+
 }
 

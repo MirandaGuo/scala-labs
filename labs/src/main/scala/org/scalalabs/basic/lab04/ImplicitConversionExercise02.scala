@@ -1,12 +1,15 @@
 package org.scalalabs.basic.lab04
 
-import org.joda.time.{ Duration, DateTime }
+import org.joda.time.{DateTime, Duration}
+
 import scala.math._
 import language.implicitConversions
 import language.higherKinds
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
+import org.scalalabs.basic.lab04.Exercise03.{EuroJsonMarshallerHelper, JsonConverter}
+
 import scala.util.control._
 
 case class Euro(val euros: Int, val cents: Int) {
@@ -15,6 +18,12 @@ case class Euro(val euros: Int, val cents: Int) {
 
 object Euro {
   def fromCents(cents: Int) = new Euro(cents / 100, cents % 100)
+
+  implicit object EuroAsJsonConverter extends JsonConverter[Euro] {
+    override def toJSON(t: Euro): JValue = EuroJsonMarshallerHelper.marshal(t)
+
+    override def fromJson(json: JValue): Euro = EuroJsonMarshallerHelper.unmarshal(json)
+  }
 }
 
 /**
@@ -32,6 +41,25 @@ object Euro {
  */
 object Exercise01 {
 
+  class EuroBuilder(val inCents: Int) {
+
+     def apply(eb: EuroBuilder) = new EuroBuilder(inCents + eb.inCents)
+
+     def euros = new EuroBuilder(inCents * 100)
+
+     def cents = new EuroBuilder(inCents)
+
+  }
+
+  implicit def convertToEuroBuilder(num: Int): EuroBuilder = {
+      new EuroBuilder(num)
+  }
+
+  implicit def convertToEuro(eb: EuroBuilder): Euro = {
+     Euro.fromCents(eb.inCents)
+  }
+
+
 }
 
 /**
@@ -40,6 +68,10 @@ object Exercise01 {
  * so that the call to Seq(Euro(1,5), Euro(3,2)).sorted compiles.
  */
 object Exercise02 {
+
+    implicit object OrderedEuro extends Ordering[Euro] {
+       def compare(x: Euro, y: Euro): Int = x.inCents - y.inCents
+    }
 
 }
 
@@ -54,11 +86,12 @@ object Exercise02 {
  */
 object Exercise03 {
   object JsonConverter {
-    def convertToJson[T /**provide context bound*/ ](t: T): JValue = {
-      ???
+    def convertToJson[T : JsonConverter](t: T): JValue = {
+               implicitly[JsonConverter[T]].toJSON(t)
+
     }
-    def parseFromJson[T /**provide context bound*/ ](json: JValue): T = {
-      ???
+    def parseFromJson[T : JsonConverter ](json: JValue): T = {
+       implicitly[JsonConverter[T]].fromJson(json)
     }
   }
 
